@@ -15,7 +15,8 @@ if($this->CheckoutSteps->inCheckout()) {
 }
 ```
 
-The setup for this is done in the component (it could be done with a constructor better if you intend to re-use this!)
+The setup for this is done in the component (it could be done with a constructor better if you intend to re-use this!), you set the steps up in such a way that each array element is consecutively setup with the preceeding step and next step (controller action names).
+You also setup what the first step is and what the step is that requires them to login (if you are using a form that requires a user to be logged in after a certain point), and finally setup the sessionStore which is the variable in Session you want to store this in, ideally you want it as the one that gets destroyed when they log out.
 
 ```php
  function initialize(Controller $controller) {
@@ -24,8 +25,12 @@ The setup for this is done in the component (it could be done with a constructor
                 "login_register" => "address",
                 "address" => "payment"
             );
-            if($this->Session->check('UserAuth.Checkout')) {
-                $this->currentStep = $this->Session->read('UserAuth.Checkout');
+            $this->firstStep = "address";
+            $this->loginStep = "login_register";
+            $this->sessionStore = "UserAuth.Checkout";
+
+            if($this->Session->check($this->sessionStore)) {
+                $this->currentStep = $this->Session->read($this->sessionStore);
             }
         }
 ```
