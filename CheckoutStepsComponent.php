@@ -15,7 +15,8 @@
             $this->firstStep = "address";
             $this->loginStep = "login_register";
             $this->sessionStore = "UserAuth.Checkout";
-
+            $this->formController = "Checkouts";
+            
             if($this->Session->check($this->sessionStore)) {
                 $this->currentStep = $this->Session->read($this->sessionStore);
             }
@@ -27,9 +28,9 @@
 
         function start() {
             if($this->UserAuth->isLogged()) {
-                $this->controller->redirect(array('plugin' => false, 'controller' => $this->controller->name, 'action' => $this->firstStep));
+                $this->controller->redirect(array('plugin' => false, 'controller' => $this->formController, 'action' => $this->firstStep));
             } else {
-                $this->controller->redirect(array('plugin' => false, 'controller' => $this->controller->name, 'action' => $this->loginStep));
+                $this->controller->redirect(array('plugin' => false, 'controller' => $this->formController, 'action' => $this->loginStep));
             }
         }
 
@@ -41,17 +42,17 @@
         function nextStep() {
 
             $nextStep = $this->steps[$this->currentStep];
-            $this->controller->redirect(array('plugin' => false, 'controller' => $this->controller->name, 'action' => $nextStep));
+            $this->controller->redirect(array('plugin' => false, 'controller' => $this->formController, 'action' => $nextStep));
         }
 
         function prevStep() {
             $previousStep = "";
             $previousStep = array_search($this->currentStep, $this->steps); // Finds the key associated with current step which will be the previous step!
-            $this->controller->redirect(array('plugin' => false, 'controller' => $this->controller->name, 'action' => $previousStep));
+            $this->controller->redirect(array('plugin' => false, 'controller' => $this->formController, 'action' => $previousStep));
         }
 
         function currentStep() {
-            $this->controller->redirect(array('plugin' => false, 'controller' => $this->controller->name, 'action' => $this->currentStep));
+            $this->controller->redirect(array('plugin' => false, 'controller' => $this->formController, 'action' => $this->currentStep));
         }
 
         function clear() {
